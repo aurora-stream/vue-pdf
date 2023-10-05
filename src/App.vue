@@ -2,7 +2,10 @@
 import { ref } from 'vue'
 import type { fitType } from '@v2v/pdf'
 import APdf from './components/APdf/index.vue'
-import { NButton,NSelect ,NSpace } from 'naive-ui';
+
+import workerUrl from 'pdfjs-dist/build/pdf.worker.min.js?url';
+
+import { NButton, NSelect, NSpace } from 'naive-ui';
 
 const desc = ref('启动中...')
 
@@ -13,12 +16,15 @@ setTimeout(() => {
 const page = ref(2)
 const scale = ref(1)
 const fit = ref<fitType>('auto')
+
+const url = ref('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
+
 const options = [
-  { label: "50%", value: 0.5},
-  { label: "75%", value: 0.75},
-  { label: "100%", value: 1},
-  { label: "150%", value: 1.5},
-  { label: "200%", value: 2}
+  { label: "50%", value: 0.5 },
+  { label: "75%", value: 0.75 },
+  { label: "100%", value: 1 },
+  { label: "150%", value: 1.5 },
+  { label: "200%", value: 2 }
 ]
 
 function setScale(value: number) {
@@ -41,41 +47,37 @@ function prevPage() {
 function setMode(type: fitType) {
   fit.value = type
 }
+
 </script>
 
 <template>
-  <div>
-    <div class="content">
-      <APdf :loading-size="20" :loading-text="desc" :page="page" :fit-type="fit" :scale="scale">
-        <template #bar="props">
-          <NSpace class="header">
-            <NButton :disabled="props.currentPage <= 1" @click="prevPage">
-              上一页
-            </NButton>
-            <NButton :disabled="props.currentPage >= props.pageTotal" @click="() => nextPage(props.pageTotal)">
-              下一页
-            </NButton>
+  <div class="content">
+    <a-pdf :workerSrc="workerUrl" :url="url" :loading-size="20" :loading-text="desc" :page="page" :fit-type="fit"
+      :scale="scale">
+      <template #bar="slotProps">
+        <NSpace class="header">
+          <NButton :disabled="slotProps.currentPage <= 1" @click="prevPage">
+            上一页
+          </NButton>
+          <NButton :disabled="slotProps.currentPage >= slotProps.pageTotal" @click="() => nextPage(slotProps.pageTotal)">
+            下一页
+          </NButton>
 
-            <NButton @click="(() => { setMode('page-actual') })">
-              原始
-            </NButton>
-            <NButton @click="(() => { setMode('page-width') })">
-              铺满
-            </NButton>
-            <span>
-              {{ props.currentPage }}
-              /
-              {{ props.pageTotal }}
-            </span>
-            <NSelect 
-            style="width: 160px"
-            placeholder="请选择缩放比例"
-            @update:value="setScale"
-             :options="options" />
-          </NSpace>
-        </template>
-      </APdf>
-    </div>
+          <NButton @click="(() => { setMode('page-actual') })">
+            原始
+          </NButton>
+          <NButton @click="(() => { setMode('page-width') })">
+            铺满
+          </NButton>
+          <span>
+            {{ slotProps.currentPage }}
+            /
+            {{ slotProps.pageTotal }}
+          </span>
+          <NSelect style="width: 160px" placeholder="请选择缩放比例" @update:value="setScale" :options="options" />
+        </NSpace>
+      </template>
+    </a-pdf>
   </div>
 </template>
 
@@ -85,10 +87,6 @@ function setMode(type: fitType) {
   display: flex;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
-}
-
-.content {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 </style>

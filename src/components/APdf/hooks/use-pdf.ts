@@ -1,16 +1,8 @@
 import { GlobalWorkerOptions } from 'pdfjs-dist'
-import type { MatchInfos, fitType } from '@v2v/pdf'
+import type { fitType } from '@v2v/pdf'
 import { pdf as Pdf, RenderType } from '@v2v/pdf'
-import type { Ref } from 'vue'
 import { isRef, nextTick, onMounted, ref } from 'vue'
-
-import workerUrl from 'pdfjs-dist/build/pdf.worker.js?url'
-
-export interface queryProps {
-  highlight: boolean
-  match: MatchInfos[]
-  uniqueId?: string
-}
+import { queryProps, config, usePdfProps } from '../types'
 
 const defaultQuery: queryProps = {
   highlight: false,
@@ -18,21 +10,9 @@ const defaultQuery: queryProps = {
   uniqueId: '',
 }
 
-export interface config {
-  loadAll: boolean
-  page: number
-}
-
 const defaultConfig: config = {
   loadAll: false,
   page: 1,
-}
-
-export interface usePdfProps {
-  url: string
-  pdfContainer: string | HTMLDivElement | Ref<HTMLDivElement | null>
-  query?: queryProps
-  config?: config
 }
 
 export function usePdf(
@@ -64,7 +44,7 @@ export function usePdf(
     if (!instance)
       window.console.error('instance is null')
 
-      console.log('enter setScale', scale)
+    console.log('enter setScale', scale)
     instance?.setScale(scale)
   }
 
@@ -74,9 +54,15 @@ export function usePdf(
     if (container) {
       loading.value = true
 
-      //   GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${version}/pdf.worker.js`
-
-      GlobalWorkerOptions.workerSrc = workerUrl
+      if (config.workerSrc) {
+        setPdfWorkerSrc(config.workerSrc)
+      } else {
+        console.info(` 请添加PDFJS的worker文件:
+        1. 打包到代码中
+        2. 使用CDN
+        请查看：https://github.com/aurora-stream/vue-pdf/README.md
+        `)
+      }
 
       const pdfInstance = new Pdf({
         container,
@@ -142,4 +128,9 @@ export function usePdf(
     setMode,
     setScale
   }
+}
+
+
+export function setPdfWorkerSrc(url: string) {
+  GlobalWorkerOptions.workerSrc = url
 }

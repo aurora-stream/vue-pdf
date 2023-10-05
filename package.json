@@ -1,26 +1,58 @@
 {
-  "name": "aurora-stream-vue-pdf",
-  "private": true,
-  "version": "0.0.0",
+  "name": "@v2v/vue-pdf",
+  "version": "0.0.2",
   "type": "module",
+  "description": "Aurora Stream Vue PDF",
+  "files": [
+    "README.md",
+    "dist/index.d.ts",
+    "dist/index.umd.cjs",
+    "dist/index.js",
+    "dist/style.css"
+  ],
+  "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
+  "author": {
+    "name": "Luobing",
+    "url": "https://github.com/luobingme"
+  },
+  "homepage": "https://github.com/aurora-stream/vue-pdf",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aurora-stream/vue-pdf.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aurora-stream/vue-pdf/issues"
+  },
   "dependencies": {
     "@v2v/pdf": "^0.0.3",
     "vue": "^3.3.4"
   },
+  "keywords": [
+    "pdf",
+    "vue",
+    "vue3",
+    "text search"
+  ],
   "devDependencies": {
     "@antfu/eslint-config": "1.0.0-beta.18",
     "@vicons/fluent": "^0.12.0",
     "@vitejs/plugin-vue": "^4.2.3",
     "eslint": "^8.50.0",
     "naive-ui": "^2.34.4",
+    "rollup-plugin-visualizer": "^5.9.2",
     "typescript": "^5.0.2",
     "vfonts": "^0.0.3",
     "vite": "^4.4.5",
+    "vite-plugin-dts": "^3.6.0",
     "vue-tsc": "^1.8.5"
+  },
+  "exports": {
+    "require": "./dist/index.umd.cjs",
+    "import": "./dist/index.js"
   }
 }
