@@ -1,4 +1,4 @@
-import { GlobalWorkerOptions, PixelsPerInch } from 'pdfjs-dist'
+import { GlobalWorkerOptions } from 'pdfjs-dist'
 import type { MatchInfos, fitType } from '@v2v/pdf'
 import { pdf as Pdf, RenderType } from '@v2v/pdf'
 import type { Ref } from 'vue'
