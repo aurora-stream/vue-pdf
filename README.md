@@ -48,7 +48,6 @@ const options = [
 ]
 
 function setScale(value: number) {
-  console.log('scale', value)
   scale.value = value
 }
 

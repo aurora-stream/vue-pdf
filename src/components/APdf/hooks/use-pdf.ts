@@ -23,14 +23,29 @@ export function usePdf(
 
   let instance: Pdf | null = null
 
-  function render(page: number) {
+  function render(page: number,
+    config : {
+      fitType: fitType,
+      scale: number,
+      lastScaleType: 'scale' | 'fit' | null,
+    }
+    ) {
     if (!instance)
       window.console.error('instance is null')
 
-    return instance?.render({
-      type: RenderType.SINGLE,
-      pageNum: page,
-    })
+      const { fitType, scale, lastScaleType } = config
+
+      const renderProps =  lastScaleType === 'scale' ? { 
+        type: RenderType.SINGLE,
+        pageNum: page,
+        scale: scale,
+      } : {
+        type: RenderType.SINGLE,
+        pageNum: page,
+        fitType: fitType,
+      }
+
+    return instance?.render(renderProps)
   }
 
   function setMode(type: fitType) {
@@ -43,8 +58,6 @@ export function usePdf(
   function setScale(scale: number) {
     if (!instance)
       window.console.error('instance is null')
-
-    console.log('enter setScale', scale)
     instance?.setScale(scale)
   }
 
@@ -106,8 +119,7 @@ export function usePdf(
             pdfInstance.render({
               type: RenderType.SINGLE,
               pageNum: config.page,
-            }).then((instance) => {
-              window.console.log('instance', instance)
+            }).then((_instance) => {
             }).catch((err) => {
               window.console.error('Render single page error', err)
             }).finally(() => {

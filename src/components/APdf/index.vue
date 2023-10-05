@@ -3,6 +3,7 @@ import type { PropType } from 'vue'
 import { computed, ref, watch } from 'vue'
 import type { fitType } from '@v2v/pdf'
 import { usePdf } from './hooks/use-pdf'
+import '@v2v/pdf/package/styles/index.css'
 
 const props = defineProps({
   loadingText: {
@@ -63,6 +64,7 @@ const loadingTextStyle = computed(() => ({
 }))
 
 const pdfRef = ref<HTMLDivElement | null>(null)
+const lastScaleType = ref<'scale' | 'fit' | null>(null)
 
 const { loading, render, total, setMode, setScale } = usePdf(
   {
@@ -79,14 +81,20 @@ const { loading, render, total, setMode, setScale } = usePdf(
 watch(() => props.page, (newVal) => {
   if (newVal > total.value || newVal < 1)
     return
-  render(newVal)
+  render(newVal,{
+    fitType: props.fitType,
+    scale: props.scale,
+    lastScaleType:lastScaleType.value,
+  })
 })
 
 watch(() => props.fitType, (newVal) => {
+  lastScaleType.value = 'fit' 
   setMode(newVal)
 })
 
 watch(() => props.scale, (newVal) => {
+  lastScaleType.value = 'scale'
   setScale(newVal)
 })
 </script>
@@ -130,7 +138,6 @@ watch(() => props.scale, (newVal) => {
 }
 
 .pdfWrap {
-  overflow: hidden;
   box-sizing: border-box;
 }
 
