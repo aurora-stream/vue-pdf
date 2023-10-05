@@ -20,7 +20,7 @@ yarn add @v2v/vue-pdf
 ```typescript
 import { ref } from 'vue'
 import type { fitType } from '@v2v/pdf'
-import APdf from '@v2v/vue-pdf'
+import {APdf} from '@v2v/vue-pdf'
 
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.js?url';
 // or use CDN
