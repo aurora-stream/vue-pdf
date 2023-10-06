@@ -96,4 +96,3 @@ function setMode(type: fitType) {
   align-items: center;
 }
 </style>
-
