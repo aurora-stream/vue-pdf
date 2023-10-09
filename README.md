@@ -111,6 +111,10 @@ function setMode(type: fitType) {
 
 轻松完成高亮或者文本精准定位，无需后台关心PDF的坐标系
 
+### 高度定制(设计中)
+
+快速完成在线编辑、和预览pdf
+
 ## 备注
 
 ### 关于worker
