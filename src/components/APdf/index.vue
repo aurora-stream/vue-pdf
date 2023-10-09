@@ -79,18 +79,22 @@ const { loading, render, total, setMode, setScale } = usePdf(
   },
 )
 
+watch(() => loading.value, (value) => {
+  console.log('value', value)
+})
+
 watch(() => props.page, (newVal) => {
   if (newVal > total.value || newVal < 1)
     return
-  render(newVal,{
+  render(newVal, {
     fitType: props.fitType,
     scale: props.scale,
-    lastScaleType:lastScaleType.value,
+    lastScaleType: lastScaleType.value,
   })
 })
 
 watch(() => props.fitType, (newVal) => {
-  lastScaleType.value = 'fit' 
+  lastScaleType.value = 'fit'
   setMode(newVal)
 })
 
@@ -101,23 +105,17 @@ watch(() => props.scale, (newVal) => {
 </script>
 
 <template>
-  <div>
-    <slot name='bar' :page-total="total" :current-page="page" />
-    <div class="pdfWrap">
-      <div id="pdf" ref="pdfRef" />
-    </div>
+  <slot name='bar' :page-total="total" :current-page="page" />
+  <div id="pdf" ref="pdfRef" />
 
-    <Teleport to="body">
-      <template v-show="showLoading && loading">
-        <div class="loadingContainer">
-          <span class="loading" :style="loadingStyle" />
-          <p class="loadingText" :style="loadingTextStyle">
-            {{ loadingText }}
-          </p>
-        </div>
-      </template>
-    </Teleport>
-  </div>
+  <Teleport to="body">
+    <div class="loadingContainer" v-show="showLoading && loading">
+      <span class="loading" :style="loadingStyle" />
+      <p class="loadingText" :style="loadingTextStyle">
+        {{ loadingText }}
+      </p>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -131,26 +129,18 @@ watch(() => props.scale, (newVal) => {
   }
 }
 
-#pdf {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-.pdfWrap {
-  box-sizing: border-box;
-}
-
 .loadingContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 999;
 }
 
 .loading {
+  display: inline-block;
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-top: 2px solid green;
   border-radius: 50%;

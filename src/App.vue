@@ -18,6 +18,7 @@ const scale = ref(1)
 const fit = ref<fitType>('auto')
 
 const url = ref('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
+// const url = ref('https://projects.wojtekmaj.pl/react-pdf/assets/sample-8bb8af10.pdf')
 
 const options = [
   { label: "50%", value: 0.5 },
@@ -55,17 +56,17 @@ function setMode(type: fitType) {
       :scale="scale">
       <template #bar="slotProps">
         <NSpace class="header">
-          <NButton :disabled="slotProps.currentPage <= 1" @click="prevPage">
-            上一页
+          <NButton size="small" :disabled="slotProps.currentPage <= 1" @click="prevPage">
+            &lt
           </NButton>
-          <NButton :disabled="slotProps.currentPage >= slotProps.pageTotal" @click="() => nextPage(slotProps.pageTotal)">
-            下一页
+          <NButton size="small" :disabled="slotProps.currentPage >= slotProps.pageTotal"
+            @click="() => nextPage(slotProps.pageTotal)">
+            &gt
           </NButton>
-
-          <NButton @click="(() => { setMode('page-actual') })">
+          <NButton size="small" @click="(() => { setMode('page-actual') })">
             原始
           </NButton>
-          <NButton @click="(() => { setMode('page-width') })">
+          <NButton size="small" @click="(() => { setMode('page-width') })">
             铺满
           </NButton>
           <span>
@@ -73,7 +74,7 @@ function setMode(type: fitType) {
             /
             {{ slotProps.pageTotal }}
           </span>
-          <NSelect style="width: 160px" placeholder="请选择缩放比例" @update:value="setScale" :options="options" />
+          <NSelect  size="small" style="width: 80px" placeholder="缩放比例" @update:value="setScale" :options="options" />
         </NSpace>
       </template>
     </a-pdf>
@@ -82,10 +83,28 @@ function setMode(type: fitType) {
 
 <style scoped>
 .header {
+  position: absolute;
+  top: 10px;
+  left: 0;
   color: green;
   display: flex;
   align-items: center;
   width: 100%;
   margin: 20px 0;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+.content {
+  width: 90%;
+  max-width: 1100px;
+  margin: 100px auto 0;
+  border: 1px solid #222;
+  height: calc(100vh - 140px);
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+#app {
+  overflow: hidden;
 }
 </style>

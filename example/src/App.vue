@@ -89,10 +89,4 @@ function setMode(type: fitType) {
   width: 100%;
   margin: 20px 0;
 }
-.content {
-  border: 1px solid #eee;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 </style>
