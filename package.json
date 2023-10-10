@@ -29,7 +29,7 @@
     "url": "https://github.com/aurora-stream/vue-pdf/issues"
   },
   "dependencies": {
-    "@v2v/pdf": "^0.0.4",
+    "@v2v/pdf": "workspace:../core",
     "vue": "^3.3.4"
   },
   "keywords": [

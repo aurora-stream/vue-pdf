@@ -1,6 +1,5 @@
-import { GlobalWorkerOptions } from 'pdfjs-dist'
 import type { fitType } from '@v2v/pdf'
-import { pdf as Pdf, RenderType } from '@v2v/pdf'
+import { pdf as Pdf, RenderType, GlobalWorkerOptions, pdfjsVersion } from '@v2v/pdf'
 import { isRef, nextTick, onMounted, ref } from 'vue'
 import { queryProps, config, usePdfProps } from '../types'
 
@@ -15,6 +14,8 @@ const defaultConfig: config = {
   page: 1,
 }
 
+export type lastScaleType = 'scale' | 'fit' | null
+
 export function usePdf(
   { pdfContainer, query = defaultQuery, url, config = defaultConfig }: usePdfProps,
 ) {
@@ -23,30 +24,45 @@ export function usePdf(
 
   let instance: Pdf | null = null
 
-  function render(page: number,
-    config : {
-      fitType: fitType,
-      scale: number,
-      lastScaleType: 'scale' | 'fit' | null,
+  async function render(
+    config: {
+      pageNum?: number,
+      renderType?: RenderType,
+      fitType?: fitType,
+      scale?: number,
+      lastScaleType?: lastScaleType,
     }
-    ) {
-    if (!instance)
+  ) {
+    if (!instance) {
       window.console.error('instance is null')
+    }
 
-      const { fitType, scale, lastScaleType } = config
+    loading.value = true
 
-      const renderProps =  lastScaleType === 'scale' ? { 
-        type: RenderType.SINGLE,
-        pageNum: page,
-        scale: scale,
-      } : {
-        type: RenderType.SINGLE,
-        pageNum: page,
-        fitType: fitType,
-      }
+    const { fitType, scale, lastScaleType, pageNum, renderType} = config
 
-    return instance?.render(renderProps)
+    const renderProps = lastScaleType === 'scale' ? {
+      type: renderType,
+      pageNum,
+      scale,
+    } : {
+      type: renderType,
+      pageNum,
+      fitType,
+    }
+
+    console.log('renderProps', renderProps)
+
+    try {
+      await instance?.render(renderProps)
+    } catch (err) {
+      console.error('instance?.render', err)
+    }
+
+
+    loading.value = false
   }
+
 
   function setMode(type: fitType) {
     if (!instance)
@@ -67,15 +83,7 @@ export function usePdf(
     if (container) {
       loading.value = true
 
-      if (config.workerSrc) {
-        setPdfWorkerSrc(config.workerSrc)
-      } else {
-        console.info(` 请添加PDFJS的worker文件:
-        1. 打包到代码中
-        2. 使用CDN
-        请查看：https://github.com/aurora-stream/vue-pdf/README.md
-        `)
-      }
+      setPdfWorkerSrc(config.workerSrc)
 
       const pdfInstance = new Pdf({
         container,
@@ -90,42 +98,12 @@ export function usePdf(
         total.value = pdfInstance.pageNum || 0
 
         nextTick(() => {
-          if (config.loadAll) {
-            pdfInstance.render().then((instance) => {
-              if (query?.highlight) {
-                setTimeout(() => {
-                  if (query?.match.length > 0) {
-                    instance.generateHightLight(
-                      query.match,
-                      query.uniqueId || `default-${new Date().getTime()}}`,
-                    )
-                    loading.value = false
-                  }
-                  else {
-                    console.error('match is empty')
-                  }
-                }, 0)
-              }
-              else {
-                loading.value = false
-              }
-            }).catch((err) => {
-              console.error('pdfInstance.render', err)
-            }).finally(() => {
-              loading.value = false
-            })
+          const renderProps = {
+            pageNum: config.page || 1,
+            lastScaleType: 'fit' as lastScaleType,
+            renderType: config.loadAll ? RenderType.ALL : RenderType.SINGLE,
           }
-          else {
-            pdfInstance.render({
-              type: RenderType.SINGLE,
-              pageNum: config.page,
-            }).then((_instance) => {
-            }).catch((err) => {
-              window.console.error('Render single page error', err)
-            }).finally(() => {
-              loading.value = false
-            })
-          }
+          render(renderProps)
         })
       })
     }
@@ -135,14 +113,15 @@ export function usePdf(
   })
   return {
     loading,
-    render,
     total,
+    render,
     setMode,
-    setScale
+    vPdf: instance,
+    setScale,
   }
 }
 
 
-export function setPdfWorkerSrc(url: string) {
-  GlobalWorkerOptions.workerSrc = url
+export function setPdfWorkerSrc(url?: string) {
+  GlobalWorkerOptions.workerSrc = url || `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`
 }

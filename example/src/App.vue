@@ -19,7 +19,6 @@ const scale = ref(1)
 const fit = ref<fitType>('auto')
 
 const url = ref('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
-// const url = ref('https://projects.wojtekmaj.pl/react-pdf/assets/sample-8bb8af10.pdf')
 
 const options = [
   { label: "50%", value: 0.5 },

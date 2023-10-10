@@ -12,3 +12,4 @@ export default {
 
 export * from './APdf/types/index'
 
+export * from './APdf/hooks/index'

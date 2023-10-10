@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { PropType } from 'vue'
 import { computed, ref, watch } from 'vue'
-import type { fitType } from '@v2v/pdf'
+import { RenderType, type fitType } from '@v2v/pdf'
 import { usePdf } from './hooks/use-pdf'
 
-import '@v2v/pdf/package/styles/index.css'
+import '@v2v/pdf/styles/index.css'
 
 const props = defineProps({
   loadingText: {
@@ -67,7 +67,8 @@ const loadingTextStyle = computed(() => ({
 const pdfRef = ref<HTMLDivElement | null>(null)
 const lastScaleType = ref<'scale' | 'fit' | null>(null)
 
-const { loading, render, total, setMode, setScale } = usePdf(
+
+const { loading, vPdf, render, total, setMode, setScale } = usePdf(
   {
     url: props.url,
     pdfContainer: pdfRef,
@@ -79,17 +80,46 @@ const { loading, render, total, setMode, setScale } = usePdf(
   },
 )
 
+// watch
 watch(() => loading.value, (value) => {
   console.log('value', value)
 })
 
-watch(() => props.page, (newVal) => {
-  if (newVal > total.value || newVal < 1)
+watch(() => props.loadAll, (mode) => {
+  if (mode) {
+    render({
+      fitType: props.fitType,
+      scale: props.scale,
+      lastScaleType: lastScaleType.value,
+      renderType: RenderType.ALL,
+    })
+  } else {
+    render({
+      pageNum: props.page,
+      fitType: props.fitType,
+      scale: props.scale,
+      lastScaleType: lastScaleType.value,
+      renderType: RenderType.SINGLE,
+    })
+  }
+})
+
+watch(() => props.page, (page) => {
+  if (page > total.value || page < 1) {
     return
-  render(newVal, {
+  }
+
+  if (props.loadAll) {
+    console.warn('LoadAll mode, page prop will not work')
+    return
+  }
+
+  render({
+    pageNum: page,
     fitType: props.fitType,
     scale: props.scale,
     lastScaleType: lastScaleType.value,
+    renderType: props.loadAll ? RenderType.ALL : RenderType.SINGLE,
   })
 })
 
@@ -102,12 +132,26 @@ watch(() => props.scale, (newVal) => {
   lastScaleType.value = 'scale'
   setScale(newVal)
 })
+
+
+// methods
+function getTotal() {
+    return total.value
+}
+
+function getVPdfRef() {
+  return vPdf
+}
+
+
+defineExpose({
+  getTotal,
+  getVPdfRef
+})
 </script>
 
 <template>
-  <slot name='bar' :page-total="total" :current-page="page" />
   <div id="pdf" ref="pdfRef" />
-
   <Teleport to="body">
     <div class="loadingContainer" v-show="showLoading && loading">
       <span class="loading" :style="loadingStyle" />
