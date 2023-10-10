@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import type { fitType } from '@v2v/pdf'
 import {APdf} from '@v2v/vue-pdf'
+import '@v2v/vue-pdf/dist/style.css'
 
 import workerUrl from 'pdfjs-dist/build/pdf.worker.min.js?url';
 

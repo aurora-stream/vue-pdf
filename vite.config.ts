@@ -30,8 +30,7 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'vue',
-        'pdfjs-dist',
-        '@v2v/pdf'
+        'pdfjs-dist'
       ],
       output: {
         exports: 'named',
