@@ -2,6 +2,7 @@
 import {ref, computed } from 'vue';
 import type {fitType} from '@v2v/pdf'
 import { APdf } from '@v2v/vue-pdf'
+import '@v2v/vue-pdf/dist/style.css'
 
 import {NButton, NSelect, NSpace} from 'naive-ui';
 

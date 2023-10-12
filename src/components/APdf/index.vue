@@ -3,7 +3,6 @@ import type { PropType } from 'vue'
 import { computed, ref, watch } from 'vue'
 import { RenderType, type fitType } from '@v2v/pdf'
 import { usePdf } from './hooks/use-pdf'
-
 import '@v2v/pdf/styles/index.css'
 
 const props = defineProps({

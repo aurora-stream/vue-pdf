@@ -2,7 +2,6 @@ import { App } from 'vue';
 
 import APdf from './APdf/index.vue'
 
-export { APdf }
 
 export default {
   install(app: App) {
@@ -13,3 +12,5 @@ export default {
 export * from './APdf/types/index'
 
 export * from './APdf/hooks/index'
+
+export { APdf }

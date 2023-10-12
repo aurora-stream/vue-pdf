@@ -38,7 +38,8 @@ export default defineConfig({
         exports: 'named',
         globals: {
           'vue': 'vue',
-          'pdfjs-dist': 'pdfjs-dist'
+          'pdfjs-dist': 'pdfjs-dist',
+          '@v2v/pdf': '@v2v/pdf'
         },
       }
     },

@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@v2v/vue-pdf": "^0.0.12",
+    "@v2v/vue-pdf": "workspace:^",
     "naive-ui": "^2.35.0",
     "vue": "^3.3.4"
   },
