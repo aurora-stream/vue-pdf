@@ -1,6 +1,6 @@
 {
   "name": "@v2v/vue-pdf",
-  "version": "0.0.9",
+  "version": "0.0.12",
   "type": "module",
   "description": "Aurora Stream Vue PDF",
   "files": [
@@ -29,7 +29,7 @@
     "url": "https://github.com/aurora-stream/vue-pdf/issues"
   },
   "dependencies": {
-    "@v2v/pdf": "workspace:../core",
+    "@v2v/pdf": "0.0.5",
     "vue": "^3.3.4"
   },
   "keywords": [

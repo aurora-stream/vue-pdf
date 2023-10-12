@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { fitType } from '@v2v/pdf'
+import {ref, computed } from 'vue';
+import type {fitType} from '@v2v/pdf'
 
 import APdf from './components/APdf/index.vue'
 
-import { NButton, NSelect, NSpace } from 'naive-ui';
+import {NButton, NSelect, NSpace} from 'naive-ui';
 
 // const desc = ref('启动中...')
 
@@ -21,11 +21,11 @@ const APdfRef = ref<InstanceType<typeof APdf> | null>(null)
 const url = ref('https://mozilla.github.io/pdf.js/web/compressed.tracemonkey-pldi-09.pdf')
 
 const options = [
-  { label: "50%", value: 0.5 },
-  { label: "75%", value: 0.75 },
-  { label: "100%", value: 1 },
-  { label: "150%", value: 1.5 },
-  { label: "200%", value: 2 }
+  {label: "50%", value: 0.5},
+  {label: "75%", value: 0.75},
+  {label: "100%", value: 1},
+  {label: "150%", value: 1.5},
+  {label: "200%", value: 2}
 ]
 
 
@@ -74,10 +74,10 @@ function setMode(type: fitType) {
       })">
         {{ loadAll ? '单页' : '全部' }}
       </NButton>
-      <NButton size="small" @click="(() => { setMode('page-actual') })">
+      <NButton size="small" @click="(() => {setMode('page-actual')})">
         原始
       </NButton>
-      <NButton size="small" @click="(() => { setMode('page-width') })">
+      <NButton size="small" @click="(() => {setMode('page-width')})">
         铺满
       </NButton>
       <span>
@@ -110,11 +110,9 @@ function setMode(type: fitType) {
   width: 90%;
   max-width: 1100px;
   margin: 100px auto 0;
-  border: 1px solid #222;
   height: calc(100vh - 140px);
   overflow: auto;
   padding-right: 3px;
-  box-sizing: border-box;
 }
 
 #app {

@@ -1,6 +1,7 @@
 
 import type { MatchInfos } from '@v2v/pdf'
-import type { Ref } from 'vue'
+
+import  type { Ref } from 'vue'
 
 export interface queryProps {
   highlight: boolean

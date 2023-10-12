@@ -19,6 +19,7 @@ export type lastScaleType = 'scale' | 'fit' | null
 export function usePdf(
   { pdfContainer, query = defaultQuery, url, config = defaultConfig }: usePdfProps,
 ) {
+  console.log('query', query)
   const loading = ref(false)
   const total = ref(0)
 
@@ -39,7 +40,7 @@ export function usePdf(
 
     loading.value = true
 
-    const { fitType, scale, lastScaleType, pageNum, renderType} = config
+    const { fitType, scale, lastScaleType, pageNum, renderType } = config
 
     const renderProps = lastScaleType === 'scale' ? {
       type: renderType,
@@ -54,13 +55,23 @@ export function usePdf(
     console.log('renderProps', renderProps)
 
     try {
-      await instance?.render(renderProps)
+      const renderInstance = await instance?.render(renderProps)
+      loading.value = false
+
+      if (renderType === RenderType.ALL) {
+        renderInstance?.generateHightLight([
+          {
+            sortId: [1, 2, 3],
+            text: 'test'
+          }
+        ], 'pdf_1')
+      }
+
+      return renderInstance
     } catch (err) {
       console.error('instance?.render', err)
+      return null
     }
-
-
-    loading.value = false
   }
 
 

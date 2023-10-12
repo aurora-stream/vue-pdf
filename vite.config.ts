@@ -1,11 +1,11 @@
 import {
-  //  PluginOption,
+   PluginOption,
   defineConfig
 } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
-// import { visualizer } from "rollup-plugin-visualizer";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -15,13 +15,13 @@ export default defineConfig({
       rollupTypes: true,
       include: ["./src/components"],
     }),
-    // visualizer({
-    //   template: "treemap", 
-    //   open: true,
-    //   gzipSize: true,
-    //   brotliSize: true,
-    //   filename: "analyse.html", 
-    // }) as PluginOption
+    visualizer({
+      template: "treemap", 
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+      filename: "analyse.html", 
+    }) as PluginOption
   ],
   build: {
     lib: {
@@ -32,14 +32,13 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        'vue',
-        'pdfjs-dist'
+        'vue'
       ],
       output: {
         exports: 'named',
         globals: {
           'vue': 'vue',
-          'pdfjs-dist': 'PDFJS',
+          'pdfjs-dist': 'pdfjs-dist'
         },
       }
     },

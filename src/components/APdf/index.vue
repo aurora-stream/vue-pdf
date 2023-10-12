@@ -143,7 +143,6 @@ function getVPdfRef() {
   return vPdf
 }
 
-
 defineExpose({
   getTotal,
   getVPdfRef
